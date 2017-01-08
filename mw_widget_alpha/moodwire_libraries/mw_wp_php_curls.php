@@ -180,7 +180,7 @@ function curl_interval_data($apikey, $chart_builder) {
 	$result = wp_remote_get($url);
 
 	if (is_wp_error($result)) {
-		$result = default_chart_data($apikey);
+		$result = default_chart_curl($apikey);
 		echo '<script>alert("Sorry, \n there is no data available for these entities.");</script>';
 	}
 

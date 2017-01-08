@@ -43,7 +43,7 @@ function pull_from_mw_cache_table($apikey) {																	//--------		PULL FR
 	if ( $sql_query === 0 ) {																	//--	if table does not exist, it will create the table in the wp DB
 		insert_into_mw_table_cache($apikey);
 	} 
-	$sql_query = $wpdb->get_results("SELECT * FROM $table_cache LIMIT 50", OBJECT );
+	$sql_query = $wpdb->get_results("SELECT * FROM $table_cache LIMIT 10", OBJECT );
 	return $sql_query;
 };//--------	--------	--------	--------	--------
 
@@ -62,7 +62,7 @@ function insert_dummy_data_into_mw_table_cache() {
 	$moodwire->source = explode("," , "5446b7824f7a47273096f262,https://www.moodwire.com/item/5446b7824f7a47273096f262,news");
 	$moodwire->url = "http://www.moodwire.com";
 
-	for ($i = 0; $i < 20; $i++ ) {
+	for ($i = 0; $i < 10; $i++ ) {
 		$wpdb->insert(
 			$table_cache, array(
 				'article_body' => $moodwire->article_body,
@@ -102,7 +102,7 @@ function insert_into_mw_table_cache($apikey) {
 	
 	$results = pull_from_mw_db_table();
 	$results = mw_date_filter($results);
-	$result = curl_articles($results, '20', $apikey);
+	$result = curl_articles($results, '10', $apikey);
 // var_dump('get article data',$result);
 	for ($i = 0; $i < count($result); $i++ ) {
 		$refined_object = refine_mw_data_object($result[$i]);
@@ -143,7 +143,7 @@ function update_mw_table_cache($apikey, $results) {
 		insert_into_mw_table_cache($apikey);
 	}
 	$results = mw_date_filter($results);
-	$result = curl_articles($results, '20', $apikey);
+	$result = curl_articles($results, '10', $apikey);
 // var_dump('updating article data',$result);
 // var_dump($result);
 // var_dump(count($result));
