@@ -67,7 +67,8 @@ function define_mw_limiter($limiter) {																//--------		CREATES A COUN
 
 
 function get_current_day_php_format() {																//--------		GETS TODAYS DATE
-	$today_date = date('Y-m-d');																	
+	$today_date = new DateTime("now", new DateTimeZone('America/Los_Angeles'));
+	$today_date = $today_date->format('Y-m-d');
 	$today_date_string = strtotime($today_date);
 
 	return $today_date;
@@ -103,14 +104,12 @@ function moodwire_refine_location_data($location_data, $limit_locations, $uuid) 
 };//--------	--------	--------	--------	--------
 
 
-function mw_run_filter_and_sort($chart_data) {
-
+function mw_run_filter_and_sort($chart_data) {														//--------		SORTS ALL OF THE INTERVAL DATA INTO APPROPRIATE ARRAY FOR DATA STORAGE	
+	$m = count($chart_data->entity_cache);
 	$new_array = array();
-	for ($a = 0; $a < $chart_data['limiter']; $a++) {												//--	NEED TO DO -1 BECAUSE IT COUNTS ['LIMITER'] IN THE OVERALL NUMBER, THROWS ERROR
-		array_push($new_array, array($chart_data[$a]->entity_id));
+	for ($a = 0; $a < $m; $a++) {												
+		array_push($new_array, array($chart_data->entity_cache[$a]));			
 	}
-
-	$m = count($new_array);
 
 	foreach($chart_data as $data) {
 		for ($k = 0; $k < $m; $k++) {
@@ -197,8 +196,8 @@ function mw_process_post_data($data) {																//--------		TAKES THE DATA
 	if(!isset($data['stacked_bar_charts'])) { $data['stacked_bar_charts'] = 'off';}
 		$data['stacked_bar_charts'] = mw_process_chart($data['stacked_bar_charts'], $data['mw_stacked_size'], $data['mw_stacked_colors']);
 
-	if(!isset($data['trend_line_charts'])) 	{ $data['trend_line_charts'] = 'off';}
-		$data['trend_line_charts'] = mw_process_chart($data['trend_line_charts'], $data['mw_trend_size'], $data['mw_trend_colors']);
+	// if(!isset($data['trend_line_charts'])) 	{ $data['trend_line_charts'] = 'off';}
+	// 	$data['trend_line_charts'] = mw_process_chart($data['trend_line_charts'], $data['mw_trend_size'], $data['mw_trend_colors']);
 
 	// if(!isset($data['calendar_charts'])) 	{ $data['calendar_charts'] = 'off';}
 	// 	$data['calendar_charts'] = mw_process_chart($data['calendar_charts'], $data['mw_calendar_size'], $data['mw_calendar_colors']);
@@ -217,7 +216,7 @@ function mw_process_post_data($data) {																//--------		TAKES THE DATA
 };//--------	--------	--------	--------	--------
 
 
-function mw_process_chart($status, $size, $colors) {										//--------		CREATE A NEW OBJECT AND CONVER IT TO A STRING
+function mw_process_chart($status, $size, $colors) {												//--------		CREATE A NEW OBJECT AND CONVER IT TO A STRING
 	$processed_chart_data = new stdClass();
 	$processed_chart_data->status = $status;
 	$processed_chart_data->size = $size;
@@ -239,7 +238,7 @@ function mw_create_options($images, $assoc, $border) {
 };//--------	--------	--------	--------	--------
 
 
-function mw_string_to_object_results($data) {												//--------		MAKES DATA STRING INTO MULTIPLE OBJECTS
+function mw_string_to_object_results($data) {														//--------		MAKES DATA STRING INTO MULTIPLE OBJECTS
 // var_dump($data);
 	$data[6] = json_decode($data[6]);
 	$data[7] = json_decode($data[7]);
@@ -263,10 +262,10 @@ function mw_string_to_object_results($data) {												//--------		MAKES DATA 
 };//--------	--------	--------	--------	--------
 
 
-function mw_filter_null_to_0($data, $size, $count) {										//--------		IF ANY DATA IS NULL IT WILL BE REPLACED WITH 0 FOR THE WORD COUNT CHART TO WORK
+function mw_filter_null_to_0($data, $size, $count) {												//--------		IF ANY DATA IS NULL IT WILL BE REPLACED WITH 0 FOR THE WORD COUNT CHART TO WORK
 	$diff = $size - $count;
 	
-	if ($count == 0) { $diff = 0;};															//--  this ensures that count will start at 0 with an empty array
+	if ($count == 0) { $diff = 0;};																	//--  this ensures that count will start at 0 with an empty array
 	
 	$empty_obj = new stdClass();
 		$empty_obj->count = 0;
@@ -280,7 +279,7 @@ function mw_filter_null_to_0($data, $size, $count) {										//--------		IF ANY
 };//--------	--------	--------	--------	--------
 
 
-function mw_select_charts($data) {															//--------		MAKES AN OBJECT WITH ON/OFF CHART SELECTORS
+function mw_select_charts($data) {																	//--------		MAKES AN OBJECT WITH ON/OFF CHART SELECTORS
 	
 	$data = (object) [
 		'gauge_charts' => 		json_decode($data[6])->status,
@@ -292,7 +291,7 @@ function mw_select_charts($data) {															//--------		MAKES AN OBJECT WIT
 		'scatter_charts' => 	json_decode($data[16])->status,
 		'treemap_charts' => 	json_decode($data[17])->status,
 		'stacked_bar_charts' => json_decode($data[18])->status,
-		'trend_line_charts' => 	json_decode($data[19])->status,
+		// 'trend_line_charts' => 	json_decode($data[19])->status,
 
 		'bubble_charts' => 		json_decode($data[21])->status,
 		'word_cloud_charts' => 	json_decode($data[23])->status
@@ -301,5 +300,27 @@ function mw_select_charts($data) {															//--------		MAKES AN OBJECT WIT
 	return $data;
 };//--------	--------	--------	--------	--------
 
+
+function mw_replace_null_summary($data) {															//--------		CONVERTS NULL DATA TO 0 FOR GRAPH RENDERING
+	foreach ($data as $chart_data) {
+		for ($i = 1; $i < 22; $i++) {
+			if ($chart_data[$i] == new stdClass()) {
+				$chart_data[$i] = (object) [
+					'entity_id' => $chart_data[0], 
+					'mood' => 0,
+					'neutrals' => 0,
+					'buzz' => 0,
+					'positives' => 0,
+					'date' => date("Y-m-d"),
+					'negatives' => 0,
+					"type" => $chart_data[1]->type,
+					'name' => $chart_data[1]->name
+					];
+			}
+		}
+			}
+	return $data;
+};//--------	--------	--------	--------	--------			
+	
 
 ?>

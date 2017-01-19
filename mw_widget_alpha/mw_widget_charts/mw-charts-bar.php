@@ -9,25 +9,25 @@
             mini_bar_div_master.className = 'mini_bar_div';
             document.getElementById('bar_div').appendChild(mini_bar_div_master);   
 
-        var mini_bar_div_positive = document.createElement('div');                                  //--    appends three bar charts ( positive, negative, neutral)
-            mini_bar_div_positive.id = 'mini_bar_div_positive';
-            mini_bar_div_positive.className = 'mini_bar_div';
-            document.getElementById('bar_div').appendChild(mini_bar_div_positive);
+        // var mini_bar_div_positive = document.createElement('div');                                  //--    appends three bar charts ( positive, negative, neutral)
+        //     mini_bar_div_positive.id = 'mini_bar_div_positive';
+        //     mini_bar_div_positive.className = 'mini_bar_div';
+        //     document.getElementById('bar_div').appendChild(mini_bar_div_positive);
         
-        var mini_bar_div_negative = document.createElement('div');                                  //--    appends three bar charts ( positive, negative, neutral)
-            mini_bar_div_negative.id = 'mini_bar_div_negative';
-            mini_bar_div_negative.className = 'mini_bar_div';
-            document.getElementById('bar_div').appendChild(mini_bar_div_negative);
+        // var mini_bar_div_negative = document.createElement('div');                                  //--    appends three bar charts ( positive, negative, neutral)
+        //     mini_bar_div_negative.id = 'mini_bar_div_negative';
+        //     mini_bar_div_negative.className = 'mini_bar_div';
+        //     document.getElementById('bar_div').appendChild(mini_bar_div_negative);
         
-        var mini_bar_div_neutral = document.createElement('div');                                   //--    appends three bar charts ( positive, negative, neutral)
-            mini_bar_div_neutral.id = 'mini_bar_div_neutral';
-            mini_bar_div_neutral.className = 'mini_bar_div';
-            document.getElementById('bar_div').appendChild(mini_bar_div_neutral);
+        // var mini_bar_div_neutral = document.createElement('div');                                   //--    appends three bar charts ( positive, negative, neutral)
+        //     mini_bar_div_neutral.id = 'mini_bar_div_neutral';
+        //     mini_bar_div_neutral.className = 'mini_bar_div';
+        //     document.getElementById('bar_div').appendChild(mini_bar_div_neutral);
         
 
-        drawBar_positive(json, json_length);
-        drawBar_negative(json, json_length);
-        drawBar_neutral(json, json_length);
+        // drawBar_positive(json, json_length);
+        // drawBar_negative(json, json_length);
+        // drawBar_neutral(json, json_length);
         drawBar_master(json, json_length);
     };//--------    --------    --------    --------    --------
 

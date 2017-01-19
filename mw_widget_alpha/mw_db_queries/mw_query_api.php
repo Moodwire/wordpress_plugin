@@ -36,10 +36,6 @@ function pull_mw_key_table() {																	//--------		PULL FROM TABLE ON PA
 
 	$mw_limit = 1;
 	$sql_query = $wpdb->get_results( $wpdb->prepare("SELECT api_key FROM $table_key ORDER BY id DESC LIMIT %d", $mw_limit), ARRAY_N );
-	// if ( $sql_query == FALSE ) {																	//--	if table does not exist, it will create the table in the wp DB
-	// 	moodwire_api_key_table_install();
-	// 	$sql_query = $wpdb->get_results( $wpdb->prepare("SELECT api_key FROM $table_key ORDER BY id DESC LIMIT %d", $mw_limit), ARRAY_N );
-	// }
 
 	if ( $sql_query === 0 ) {
 		$default_data = array(

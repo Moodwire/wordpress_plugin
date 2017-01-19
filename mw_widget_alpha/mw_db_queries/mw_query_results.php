@@ -179,7 +179,7 @@ function insert_into_wp_mw_db_table($mw) {															//--------		INSERTS DAT
 	$scatter_charts = $mw['scatter_charts'];
 	$treemap_charts = $mw['treemap_charts'];
 	$stacked_bar_charts = $mw['stacked_bar_charts'];
-	$trend_line_charts = $mw['trend_line_charts'];
+	// $trend_line_charts = $mw['trend_line_charts'];
 	// $calendar_charts = $mw['calendar_charts'];
 	$bubble_charts = $mw['bubble_charts'];
 	// $location_charts = $mw['location_charts'];
@@ -199,7 +199,7 @@ function insert_into_wp_mw_db_table($mw) {															//--------		INSERTS DAT
 	// if(!isset($scatter_charts)) 	{ $scatter_charts = 'off';}
 	// if(!isset($treemap_charts)) 	{ $treemap_charts = 'off';}
 	// if(!isset($stacked_bar_charts)) { $stacked_bar_charts = 'off';}
-	// if(!isset($trend_line_charts)) 	{ $trend_line_charts = 'off';}
+	if(!isset($trend_line_charts)) 	{ $trend_line_charts = 'off';}
 	if(!isset($calendar_charts)) 	{ $calendar_charts = 'off';}
 	// if(!isset($bubble_charts)) 		{ $bubble_charts = 'off';}
 	if(!isset($location_charts)) 	{ $location_charts = 'off';}

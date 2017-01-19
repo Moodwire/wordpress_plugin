@@ -179,12 +179,12 @@ function moodwire_admin() {
 									<input type='checkbox' name='stacked_bar_charts' value='on' checked style='display:none'>
 							</div>"; }; ?>
 
-					<?php if ($results[19]->status === 'on'){ 
+					<!--<php if ($results[19]->status === 'on'){ 
 						echo "<div class='mw_selectors' id='mw_trend_line_sel'>
 								<p onclick='mw_ch_p_s_h(\"#mw_trend_div\")'>TREND LINE CHARTS</p>
 									<span class='glyphicon glyphicon-remove-sign' onclick='mw_charts_div_sel(\"#mw_trend_div\", \"trend_line_charts\", \"mw_trend_line_sel\", \"on\", \"TREND LINE CHARTS\")'></span>
 									<input type='checkbox' name='trend_line_charts' value='on' checked style='display:none'>
-							</div>"; }; ?>
+							</div>"; }; ?>-->
 
 					<?php if ($results[21]->status === 'on'){ 
 						echo "<div class='mw_selectors' id='mw_bubble_sel'>
@@ -251,11 +251,11 @@ function moodwire_admin() {
 							<input type='checkbox' name='stacked_bar_charts' value='on' style='display:none'>
 						</div>"; }; ?>
 
-				<?php if ($results[19]->status === 'off'){ 
+				<!--<php if ($results[19]->status === 'off'){ 
 					echo "<div class='mw_selectors' id='mw_trend_line_sel' onclick='mw_charts_div_sel(\"#mw_trend_div\", \"trend_line_charts\", \"mw_trend_line_sel\", \"off\", \"TREND LINE CHARTS\")'>
 							<p>TREND LINE CHARTS</p>
 							<input type='checkbox' name='trend_line_charts' value='on' style='display:none'>
-						</div>"; }; ?>
+						</div>"; }; ?>-->
 
 				<?php if ($results[21]->status === 'off'){ 
 					echo "<div class='mw_selectors' id='mw_bubble_sel' onclick='mw_charts_div_sel(\"#mw_bubble_div\", \"bubble_charts\", \"mw_bubble_sel\", \"off\", \"BUBBLE CHARTS\")'>
@@ -505,18 +505,18 @@ function moodwire_admin() {
 							<label>Dark</label>		<input type="radio" name="mw_stacked_colors" value="dark"			<?php if ($results[18]->colors === "dark")		{ echo "checked"; } ?>>
 				</div>
 					
-				<div class='mw_ad_ch_div' id="mw_trend_div">
+				<!--<div class='mw_ad_ch_div' id="mw_trend_div">
 					<h3>TREND LINE CHARTS</h3>
 						<h5>CHART SIZE:</h5>
-							<label>Small</label>	<input type="radio" name="mw_trend_size" value="small" 				<?php if ($results[19]->size === "small")		{ echo "checked"; } ?>>
-							<label>Medium</label>	<input type="radio" name="mw_trend_size" value="medium"				<?php if ($results[19]->size === "medium")		{ echo "checked"; } ?>>
-							<label>Large</label>	<input type="radio" name="mw_trend_size" value="large"				<?php if ($results[19]->size === "large")		{ echo "checked"; } ?>><br>
+							<label>Small</label>	<input type="radio" name="mw_trend_size" value="small" 				<php if ($results[19]->size === "small")		{ echo "checked"; } ?>>
+							<label>Medium</label>	<input type="radio" name="mw_trend_size" value="medium"				<php if ($results[19]->size === "medium")		{ echo "checked"; } ?>>
+							<label>Large</label>	<input type="radio" name="mw_trend_size" value="large"				<php if ($results[19]->size === "large")		{ echo "checked"; } ?>><br>
 
 						<h5>CHART COLOR:</h5>
-							<label>Default</label>	<input type="radio" name="mw_trend_colors" value="default" 			<?php if ($results[19]->colors === "default")	{ echo "checked"; } ?>>
-							<label>Light</label>	<input type="radio" name="mw_trend_colors" value="light"			<?php if ($results[19]->colors === "light")		{ echo "checked"; } ?>>
-							<label>Dark</label>		<input type="radio" name="mw_trend_colors" value="dark"				<?php if ($results[19]->colors === "dark")		{ echo "checked"; } ?>>
-				</div>
+							<label>Default</label>	<input type="radio" name="mw_trend_colors" value="default" 			<php if ($results[19]->colors === "default")	{ echo "checked"; } ?>>
+							<label>Light</label>	<input type="radio" name="mw_trend_colors" value="light"			<php if ($results[19]->colors === "light")		{ echo "checked"; } ?>>
+							<label>Dark</label>		<input type="radio" name="mw_trend_colors" value="dark"				<php if ($results[19]->colors === "dark")		{ echo "checked"; } ?>>
+				</div>-->
 					
 				<!--<div class='mw_ad_ch_div' id="mw_calendar_div">
 					<h5>CHART SIZE:</h5>

@@ -1,7 +1,7 @@
 <?php
 /*
 
-	Plugin Name: Moodwire Widget 10(alpha)
+	Plugin Name: Moodwire Widget (alpha)
 	Plugin URI: http://moodwire.com
 	Description: Get the latest news and sentimentality
 	Version: 1.0
@@ -18,7 +18,7 @@ class MW_Widget extends WP_Widget {
 
 	public function __construct() {
 // register_deactivation_hook(__FILE__, 'delete_tables' );
-		$name = __('Moodwire test widget','moodwire_widget');
+		$name = __('Moodwire plugin','moodwire_widget');
 
 		$widget_ops = array(
 			'description' => __( 'This is the Alpha version widget for Moodwire.com.  This plugin will utilize the auto complete feature from the moodwire.com website.' ),
@@ -74,7 +74,7 @@ class MW_Widget extends WP_Widget {
 		include	( plugin_dir_path(__FILE__) . "mw_widget_charts/mw-charts-scatter.php" );				//		LINK TO scatter chart FOR WIDGET	----	single page format
 		include	( plugin_dir_path(__FILE__) . "mw_widget_charts/mw-charts-treemap.php" );				//		LINK TO treemap chart FOR WIDGET	----	single page format
 		include	( plugin_dir_path(__FILE__) . "mw_widget_charts/mw-charts-stacked_bar_chart.php" );		//		LINK TO stacked chart FOR WIDGET	----	single page format
-		include	( plugin_dir_path(__FILE__) . "mw_widget_charts/mw-charts-trend_line.php" );			//		LINK TO trend chart FOR WIDGET		----	single page format
+		// include	( plugin_dir_path(__FILE__) . "mw_widget_charts/mw-charts-trend_line.php" );			//		LINK TO trend chart FOR WIDGET		----	single page format
 		// include	( plugin_dir_path(__FILE__) . "mw_widget_charts/mw-charts-calendar.php" );				//		LINK TO trend chart FOR WIDGET		----	single page format
 		// include	( plugin_dir_path(__FILE__) . "mw_widget_charts/mw-d3-calendar.php" );				//		LINK TO trend chart FOR WIDGET		----	single page format
 		// include	( plugin_dir_path(__FILE__) . "mw_widget_charts/mw_d3_calendar_w-o_c3.php" );			//		LINK TO calendar chart FOR WIDGET	----	single page format
@@ -96,7 +96,10 @@ class MW_Widget extends WP_Widget {
 		// $location = json_encode($location);
 			$word_cloud = pull_word_table($apikey, $results);
 			$mw_select_charts = mw_select_charts($results);
+// $pickles = microtime(true);
 			echo '<script>widget_on_load(' . json_encode($chart_builder) . ',' . json_encode($word_cloud) . ',' . json_encode($mw_select_charts) . ');</script>';
+// $hummus = microtime(true);
+// echo "It took " . ( $hummus - $pickles ) . ' seconds';
 		};
 
 		$results = mw_string_to_object_results($results);
@@ -125,7 +128,7 @@ class MW_Widget extends WP_Widget {
 			<div id="scatter_div"		<?php if($results[16]->status === 'off') 	{ echo "style='display:none;' "; } ?>></div>
 			<div id="treemap_div"		<?php if($results[17]->status === 'off') 	{ echo "style='display:none;' "; } ?>></div>
 			<div id="stacked_bar_div"	<?php if($results[18]->status === 'off') 	{ echo "style='display:none;' "; } ?>></div>
-			<div id="trend_line_div"	<?php if($results[19]->status === 'off') 	{ echo "style='display:none;' "; } ?>></div>
+			<!--<div id="trend_line_div"	<php if($results[19]->status === 'off') 	{ echo "style='display:none;' "; } ?>></div>-->
 			<!--<div id="calendar_div"		<php if($results[20]->status === 'off') { echo "style='display:none;' "; } ?>></div>-->
 			<div id="bubble_chart_div"	<?php if($results[21]->status === 'off') 	{ echo "style='display:none;' "; } ?>></div>
 			<!--<div id="location_div"		<php if($results[22]->status === 'off') { echo "style='display:none;' "; } ?>></div>-->

@@ -53,12 +53,12 @@ function default_options($options, $api, $x, $apikey) {
 
 
 function curl_articles($options, $x, $apikey) { 
-	// $x=20;
 	$api = '/articles/';
 	$url = process_options($options, $api, $x, $apikey);
 
 	echo '<script>$(".mw_alert").remove();</script>';
-	$result = wp_remote_get($url);
+
+	$result = wp_remote_get($url, array( 'timeout' => 120));
 	$result = json_decode($result['body']);
 	$test_count = $result->results_count;
 
@@ -66,7 +66,7 @@ function curl_articles($options, $x, $apikey) {
 	if ($test_count == 0) {																		//--	if no articles are returned, a full default pull is made
 
 		$url = default_options($options, $api, $x, $apikey);
-		$result = wp_remote_get($url);
+		$result = wp_remote_get($url, array( 'timeout' => 120));
 
 		echo '<div class="mw_alert alert alert-danger alert-dismissible">'
     			. '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
@@ -78,10 +78,7 @@ function curl_articles($options, $x, $apikey) {
     	$result = $result['body'];
     	$result = json_decode($result);
     	$result = $result->results;
-    	// var_dump($result);
-		// $result = json_decode($result['body'], true);
-// var_dump('results 0', gettype($result), $result);
-// die();
+
 		return $result;
 	}
 
@@ -90,7 +87,7 @@ function curl_articles($options, $x, $apikey) {
 
 		$diff = $x - $test_count;
 		$url = default_options($options, $api, $diff, $apikey);
-		$top_off = wp_remote_get($url);
+		$top_off = wp_remote_get($url, array( 'timeout' => 120));
 		$top_off = $top_off['body'];
 		$top_off = json_decode($top_off);
 		$top_off = $top_off->results;
@@ -106,9 +103,7 @@ function curl_articles($options, $x, $apikey) {
 			$result[$a] = $top_off[$b];
 			$b++;
 		}
-// var_dump('results less than', $result);
-// var_dump(gettype($result));
-// die();
+
 		return $result;
 	} 
 
@@ -117,92 +112,92 @@ function curl_articles($options, $x, $apikey) {
     			. '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
    				. "<p>Congrats...<br>Your 'FILTERS' parameters returned plenty of articles.</p>"
     			. '</div>';
-// var_dump('full pull', $result);
-// die();
 
 	return $result;
 };//--------	--------	--------	--------	--------
-
-
-// function curl_news($options, $x) { 
-// 	$x=10;
-// 	$api = '/articles/';
-// 	$url = process_options($options, $api, $x);
-// 	$result = wp_remote_get($url);
-// 	$result = $result['body'];
-// 	$result = json_decode($result);
-// 	$result = $result->results;
-
-// 	if ($result == '[]') {
-// 		$url = default_options($options, $api, $x);
-// 		$result = wp_remote_get($url);
-// 		$result = $result['body'];
-// 		$result = json_decode($result);
-// 		$result = $result->results;
-// 	}
-
-// 	return $result;
-
-// };//--------	--------	--------	--------	--------
 
 
 function default_chart_curl($apikey) {
 
 	$url = "https://api.moodwire.net/v2.0/summary/" . $apikey . "?entities=5446b7824f7a47273096f262&return_empty_intervals=true&intervals=21&freq=daily";
 
-	$result = wp_remote_get($url);
+	$result = wp_remote_get($url, array( 'timeout' => 120));
 	
 	$result = $result['body'];
 	$result = json_decode($result);
 	$result = $result->results;	
-	$result['limiter'] = 1;
+
+	$ccc = array();																														//--	this will create array with ids for later filter functions
+	$ccc['entity_cache'] = '5446b7824f7a47273096f262';
+	$result = (object) array_merge((array)$result, (array)$ccc);
 
 	return $result;
 };//--------	--------	--------	--------	--------
 
 
 function curl_interval_data($apikey, $chart_builder) {
-
-	if ($chart_builder[5] === '') { 
-		// exit("Your FILTERS returned no chart data.  Please revise these parameters and try again.  Click this " 
-		// 		. "<a href='javascript:history.go(0)' class='btn btn-md btn-warning' id='mw_default_refresh'>button</a>" 
-		// 		. " to refresh your page and try again.  Sorry..."
-		// 	);
-		$additional = '?&entities=5446b7824f7a47273096f262'; 
-	} else { 
-	$additional = "?entities=" . $chart_builder[5];
-	}
+	$x = define_mw_limiter($chart_builder[5]);
 	$mw_end_date = get_current_day_php_format();
 	$mw_end_date = '&end=' . $mw_end_date;
 	$intervals = '&intervals=21&freq=daily&return_empty_intervals=true';
-	$url = "https://api.moodwire.net/v2.0/summary/" . $apikey . $additional . $intervals;
-// ----------------------------------------------------------------
-	$result = wp_remote_get($url);
+	$summary_cache = explode(',', $chart_builder[5]);
+
+	if ($chart_builder[5] === '') { 
+		$additional = '?&entities=5446b7824f7a47273096f262'; 
+		$url = "https://api.moodwire.net/v2.0/summary/" . $apikey . $additional . $intervals;
+		$result = wp_remote_get($url, array( 'timeout' => 120));
+		$result = $result['body'];
+		$result = json_decode($result);
+		$result = $result->results;
+
+		$ccc = array();																													//--	this will create array with ids for later filter functions
+		$ccc['entity_cache'] = '5446b7824f7a47273096f262';
+		$result = (object) array_merge((array)$result, (array)$ccc);
+
+	} else if ($x < 5) { 
+		$additional = "?entities=" . $chart_builder[5];
+		$url = "https://api.moodwire.net/v2.0/summary/" . $apikey . $additional . $intervals;
+		$result = wp_remote_get($url, array( 'timeout' => 120));
+		$result = $result['body'];
+		$result = json_decode($result);
+		$result = $result->results;
+
+		$ccc = array();																													//--	this will create array with ids for later filter functions
+		$ccc['entity_cache'] = $summary_cache;
+		$result = (object) array_merge((array)$result, (array)$ccc);
+		
+	} else {
+		$k = 0;
+		$result = new stdClass();
+		while ( $k < $x ) {		
+//	----	----	START OF WHILE LOOP 	----	----
+			$cache_call = '';
+			if ( $k < $x )	 			{ $cache_call = $cache_call . $summary_cache[$k] . ','; }
+			if ( ($k + 1) < $x)			{ $cache_call = $cache_call . $summary_cache[$k + 1] . ','; }
+			if ( ($k + 2) < $x)			{ $cache_call = $cache_call . $summary_cache[$k + 2] . ','; }
+			if ( ($k + 3) < $x)			{ $cache_call = $cache_call . $summary_cache[$k + 3] . ','; }									
+			$cache_call = trim($cache_call, ',');
+			$cache_call = '?&entities=' . $cache_call;
+			$url = "https://api.moodwire.net/v2.0/summary/" . $apikey . $cache_call . $intervals;
+// var_dump($url);
+
+			$results_cache = wp_remote_get($url, array( 'timeout' => 120));
+			$results_cache = $results_cache['body'];
+			$results_cache = json_decode($results_cache);
+			$results_cache = $results_cache->results;
+			$result = (object) array_merge_recursive((array)$result, (array)$results_cache);											//--	compiles various calls (merges the objects)
+			$k += 4;
+		}						
+//	----	----	END OF WHILE LOOP 	----	----
+		$ccc = array();																													//--	this will create array with ids for later filter functions
+		$ccc['entity_cache'] = $summary_cache;
+		$result = (object) array_merge((array)$result, (array)$ccc);
+	}
 
 	if (is_wp_error($result)) {
 		$result = default_chart_curl($apikey);
-		echo '<script>alert("Sorry, \n there is no data available for these entities.");</script>';
+		echo '<script>alert("Sorry, \n there is no data available for this/these entities.");</script>';
 	}
-
-	$result = $result['body'];
-	$result = json_decode($result);
-	
-	$result = $result->results;
-	$result['limiter'] = define_mw_limiter($chart_builder[5]);
-// ----------------------------------------------------------------
-	// $result = wp_remote_get($url);
-
-	// $result = $result['body'];
-	// $result = json_decode($result);
-	// $results_count = $result->results_count;
-
-	// if ( $results_count != 0 ) {
-		// $result = $result->results;
-		// $result['limiter'] = define_mw_limiter($chart_builder[5]);
-	// } else {
-		// $result = default_chart_data($apikey);
-		// echo '<script>alert("Sorry, \n there is no data available for these entities.");</script>';
-	// };
 
 	return $result;
 
@@ -212,10 +207,10 @@ function curl_interval_data($apikey, $chart_builder) {
 function curl_location_data($apikey, $results) {
 $default_values = '&freq=daily&intervals=1&return_empty_intervals=true';
 	if ($results[5] === '') {
-	$result = wp_remote_get('https://api.moodwire.net/v2.0/location/' . $apikey . '?by_children=53fb789c451ea02e52b8d6c7&entities=5516321c9b724739f3649835,55166a299b724739f364f02c' . $default_values);
+	$result = wp_remote_get('https://api.moodwire.net/v2.0/location/' . $apikey . '?by_children=53fb789c451ea02e52b8d6c7&entities=5516321c9b724739f3649835,55166a299b724739f364f02c' . $default_values, array( 'timeout' => 120));
 	} else {
 		$entities = "&entities=" . $results[5];
-		$result = wp_remote_get("https://api.moodwire.net/v2.0/location/" . $apikey . "?by_children=53fb789c451ea02e52b8d6c7" . $entities . $default_values);
+		$result = wp_remote_get("https://api.moodwire.net/v2.0/location/" . $apikey . "?by_children=53fb789c451ea02e52b8d6c7" . $entities . $default_values, array( 'timeout' => 120));
 	}
 	$result = $result['body'];
 	$result = json_decode($result);
@@ -235,16 +230,16 @@ function curl_word_cloud_data($apikey, $results, $limit_charts) {
 	$top_n = 25;																							//  going to be used to sync and filter out null data in mw_filter_null_to_0();
 
 	if ($results[5] === '') {
-		$result = wp_remote_get('https://api.moodwire.net/v2.0/entity-words/' . $apikey . '?entities=5576d41f9b72472aeedac84e&top_n=' . $top_n . '&aggregate=true');
+		$result = wp_remote_get('https://api.moodwire.net/v2.0/entity-words/' . $apikey . '?entities=5576d41f9b72472aeedac84e&top_n=' . $top_n . '&aggregate=true', array( 'timeout' => 120));
 		$result = $result['body'];
 		$result = json_decode($result);
 		$result = $result->results;
 	} else {
 		foreach ($word_uuid_array as $word_id) {
-			$result = wp_remote_get('https://api.moodwire.net/v2.0/entity-words/' . $apikey . '?entities=' . $word_id . '&top_n=' . $top_n . '&aggregate=true');
+			$result = wp_remote_get('https://api.moodwire.net/v2.0/entity-words/' . $apikey . '?entities=' . $word_id . '&top_n=' . $top_n . '&aggregate=true', array( 'timeout' => 120));
 			$result = $result['body'];
 			
-			if ($result == '[]') { echo 'nope'; die();};
+			// if ($result == '[]') { echo 'nope'; die();};
 			
 			$result = json_decode($result);
 			$result = $result->results;

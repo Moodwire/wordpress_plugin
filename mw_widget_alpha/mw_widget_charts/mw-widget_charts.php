@@ -25,7 +25,7 @@
         document.getElementById('scatter_div').innerHTML = '';
         document.getElementById('treemap_div').innerHTML = '';
         document.getElementById('stacked_bar_div').innerHTML = '';
-        document.getElementById('trend_line_div').innerHTML = '';
+        // document.getElementById('trend_line_div').innerHTML = '';
         // document.getElementById('calendar_div').innerHTML = '';
         document.getElementById('bubble_chart_div').innerHTML = '';
         // document.getElementById('location_div').innerHTML = '';
@@ -48,10 +48,10 @@
             mini_line_div.id = 'mini_line_div' + i;
             document.getElementById('line_div').appendChild(mini_line_div);
 
-            var mini_trend_line_div = document.createElement('div');                        //--    append trend charts
-            mini_trend_line_div.className = 'mini_trend_line_div';
-            mini_trend_line_div.id = 'mini_trend_line_div' + i;
-            document.getElementById('trend_line_div').appendChild(mini_trend_line_div);
+            // var mini_trend_line_div = document.createElement('div');                        //--    append trend charts
+            // mini_trend_line_div.className = 'mini_trend_line_div';
+            // mini_trend_line_div.id = 'mini_trend_line_div' + i;
+            // document.getElementById('trend_line_div').appendChild(mini_trend_line_div);
 
             // var mini_calendar_div = document.createElement('div');                          //--    append trend charts
             // mini_calendar_div.className = 'mini_calendar_div';
@@ -65,21 +65,50 @@
 
             i++;
         };
-
+// var timer_gauge = performance.now();
         if (chart_selectors['gauge_charts'] == 'on')        { drawGauge(json, json_length); };
-        if (chart_selectors['buzz_pie_charts'] == 'on')     { drawBuzzPie(json, json_length); };
-        if (chart_selectors['pie_charts'] == 'on')          { drawPie(json, json_length); };
-        if (chart_selectors['bar_charts'] == 'on')          { drawBar(json, json_length); };
-        if (chart_selectors['line_charts'] == 'on')         { drawLine(full_chart_data, json_length); };
+// console.log('timer_gauge: ' + (performance.now() - timer_gauge ));
 
+// var timer_buzz = performance.now();
+        if (chart_selectors['buzz_pie_charts'] == 'on')     { drawBuzzPie(json, json_length); };
+// console.log('timer_buzz: ' + (performance.now() - timer_buzz ));
+
+// var timer_pie = performance.now();        
+        if (chart_selectors['pie_charts'] == 'on')          { drawPie(json, json_length); };
+// console.log('timer_pie: ' + (performance.now() - timer_pie ));
+
+// var timer_bar = performance.now();        
+        if (chart_selectors['bar_charts'] == 'on')          { drawBar(json, json_length); };
+// console.log('timer_bar: ' + (performance.now() - timer_bar ));
+
+// var timer_line = performance.now();        
+        if (chart_selectors['line_charts'] == 'on')         { drawLine(full_chart_data, json_length); };
+// console.log('timer_line: ' + (performance.now() - timer_line ));
+
+
+// var timer_scatter = performance.now();
         if (chart_selectors['scatter_charts'] == 'on')      { drawScatter(full_chart_data, json_length); };
+// console.log('timer_scatter: ' + (performance.now() - timer_scatter ));
+
+// var timer_treemap = performance.now();
         if (chart_selectors['treemap_charts'] == 'on')      { drawTreemap(full_chart_data, json_length); };
+// console.log('timer_treemap: ' + (performance.now() - timer_treemap ));
+
+// var timer_stacked = performance.now();
         if (chart_selectors['stacked_bar_charts'] == 'on')  { drawStackedBar(full_chart_data, json_length); };
-        if (chart_selectors['trend_line_charts'] == 'on')   { drawTrendLine(full_chart_data, json_length); };
+// console.log('timer_stacked: ' + (performance.now() - timer_stacked ));
+        // if (chart_selectors['trend_line_charts'] == 'on')   { drawTrendLine(full_chart_data, json_length); };
         // drawCalendar(full_chart_data, json_length);
+
+// var timer_bubble = performance.now();
         if (chart_selectors['bubble_charts'] == 'on')       { drawBubbleChart(full_chart_data, json_length); };
+// console.log('timer_bubble: ' + (performance.now() - timer_bubble ));
         // drawLocation(location_data);
+
+// var timer_word = performance.now();
         if (chart_selectors['word_cloud_charts'] == 'on')   { word_data.forEach(drawWordChart); };
+// console.log('timer_word: ' + (performance.now() - timer_word ));
+
     };//--------    --------    --------    --------    --------
 
     function jsonDataLength(json) {                                                         //--------      PERFORMS AN ENTITY COUNT
@@ -103,7 +132,7 @@
         document.getElementById('scatter_div').innerHTML = '<p>Choose an entity, or disable scatter charts</p>';
         document.getElementById('treemap_div').innerHTML = '<p>Choose an entity, or disable treemap charts</p>';
         document.getElementById('stacked_bar_div').innerHTML = '<p>Choose an entity, or disable stacked bar charts</p>';
-        document.getElementById('trend_line_div').innerHTML = '<p>Choose an entity, or disable trend line charts</p>';
+        // document.getElementById('trend_line_div').innerHTML = '<p>Choose an entity, or disable trend line charts</p>';
         // document.getElementById('calendar_div').innerHTML = '<p>Choose an entity, or disable calendar charts</p>';
         document.getElementById('bubble_chart_div').innerHTML = '<p>Choose an entity, or disable bubble charts</p>';
         // document.getElementById('location_div').innerHTML = '<p>Choose an entity, or disable location charts</p>';
