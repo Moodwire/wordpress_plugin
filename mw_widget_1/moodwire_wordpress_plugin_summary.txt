@@ -1,0 +1,28 @@
+User inputs data into fields in the admin dashboard
+
+Those inputs are stored into 
+	wp_mw_news_sentiment_db_table_v_1_0 (refered to hereafter as table1)
+
+Then wp_mw_news_sentiment_db_article_cache_v_1_0 (refered to hereafter as table2) does a call to table1
+
+The plugin then performs a PHP curl call to the moodwire API 'Articles'
+
+The plugin then saves the returned articles to table2
+
+When the mw-widget.php (site webpage) is loaded
+
+The site webpage retrieves the articles saved in table2, and displays them
+
+
+
+the data is refreshed with periodic curl calls, or whenever table1 is updated
+
+table1 saves all entries
+table2 overwrites the articles (to save space)
+
+both tables are deleted upon plugin deactivation
+
+API table remains in the wpdb
+	this table can be altered via an input on the admin page
+
+	
